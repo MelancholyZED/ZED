@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+<!-- 注入dao层 -->
+<bean id="udao" class="com.dao.UsersDao"></bean>
+<!-- 注入biz -->
+<!-- <bean id="ubiz" class="com.biz.UsersBiz">
+两个类之间的关联属性 ref 
+<property name="usersdao" ref="udao" ></property>
+</bean> -->
+
+<!-- 注入Dao代理类 -->
+<!-- <bean id="daoproxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+设置要代理的接口名称
+<property name="proxyInterfaces" value="com.dao.IUsersDao"></property>
+设置代理接口的实现类
+<property name="target" ref="udao"></property>
+</bean> -->
+
+<bean id="daoCGLIBproxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+<!-- 设置要代理的接口 -->
+<property name="proxyTargetClass" value="true"></property>
+<!-- 设置代理接口的实现类 -->
+<property name="target" ref="udao"></property>
+<!--指定中断处理类  -->
+<property name="interceptorNames" value="daoInterceptor"></property>
+</bean>
+
+<!-- 注入中断处理类 -->
+<bean id="daoInterceptor" class="com.interceptor.DaoInterceptor"></bean>
+
+
+
+
+<!-- 集合注入部分 -->
+<!-- list集合 -->
+<bean id="listbiz" class="com.biz.ListBiz">
+ <property name="mylist">
+  <list>
+    <value>战斗机</value>
+    <value>战斗轰炸机</value>
+    <value>轰炸机</value>
+    <value>运输机</value>
+  </list>
+ </property>
+</bean>
+
+<!-- set集合 -->
+<bean id="setbiz" class="com.biz.SetBiz">
+ <property name="myset">
+  <set>
+    <value>驱逐舰</value>
+    <value>护卫舰</value>
+    <value>潜艇</value>
+    <value>扫雷艇</value>
+  </set>
+ </property>
+</bean>
+
+<!-- Map集合 -->
+<bean id="mapbiz" class="com.biz.MapBiz">
+ <property name="mymap">
+ <map>
+ <entry key="CN" value="中国"></entry>
+ <entry key="US" value="美国"></entry>
+ <entry key="UK" value="英国"></entry>
+ <entry key="UN" value="联合国"></entry>
+ </map>
+ 
+ </property>
+</bean>
+
+		
+</beans>
